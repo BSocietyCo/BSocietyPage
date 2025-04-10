@@ -5,7 +5,8 @@ import BCapImage from './img/BCap.PNG';
 export default function BSocietyLanding() {
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const [showForm, setShowForm] = useState(false);
+  
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2500);
     return () => clearTimeout(timer);
@@ -157,23 +158,109 @@ export default function BSocietyLanding() {
         viewport={{ once: true }}
         transition={{ duration: 1 }}
       >
-        {/* Texto + CTA */}
-        <div className="text-center md:text-left z-10">
-          <span className="uppercase text-xs tracking-widest text-gray-500 mb-2 inline-block">
-            Producto Exclusivo
-          </span>
-          <h2 className="text-3xl md:text-4xl mb-4 font-light">UNSEEN Blackout</h2>
-          <p className="text-gray-500 mb-6 text-lg leading-relaxed">
-            La primera señal visible de una sociedad invisible. <br />
-            100% algodón orgánico. Edición limitada. Hecha para durar y representar.
-          </p>
-          <button
-            className="mt-4 px-8 py-3 border border-gray-500 hover:bg-[#1a1a1a] transition duration-300 uppercase tracking-widest text-sm"
-            onClick={() => alert("Aquí irá la integración con Mercado Pago")}
-          >
-            Comprar ahora
-          </button>
-        </div>
+         {/* Texto + CTA */}
+          <div className="text-center md:text-left z-10">
+            <span className="uppercase text-xs tracking-widest text-gray-500 mb-2 inline-block">
+              Producto Exclusivo
+            </span>
+            <h2 className="text-3xl md:text-4xl mb-4 font-light">UNSEEN Blackout</h2>
+            <p className="text-gray-500 mb-6 text-lg leading-relaxed">
+              La primera señal visible de una sociedad invisible. <br />
+              100% algodón orgánico. Edición limitada. Hecha para durar y representar.
+            </p>
+            <p className="text-white font-semibold text-xl mb-4">$149.900 COP</p>
+            <button
+              className="mt-4 px-8 py-3 border border-gray-500 hover:bg-[#1a1a1a] transition duration-300 uppercase tracking-widest text-sm"
+              onClick={() => setShowForm(true)}
+            >
+              Comprar ahora
+            </button>
+
+            {/* Formulario visible solo si showForm es true */}
+            {showForm && (
+              <motion.form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.target;
+                const email = form.correo.value;
+                const formData = new FormData(form);
+          
+                // Validación básica de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                  alert("Por favor, ingresa un correo electrónico válido.");
+                  return;
+                }
+          
+                try {
+                  const res = await fetch("https://formspree.io/f/mvgkddpn", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                      Accept: "application/json",
+                    },
+                  });
+          
+                  if (res.ok) {
+                    // Aquí rediriges a la URL de pago
+                    window.location.href = "https://www.mercadopago.com.co/checkout/v1/redirect?pref_id=TU_ID";
+                  } else {
+                    alert("Hubo un error al enviar el formulario.");
+                  }
+                } catch (error) {
+                  console.error("Error al enviar:", error);
+                  alert("Error al enviar el formulario.");
+                }
+              }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mt-8 space-y-4 bg-[#111] p-6 rounded-xl border border-gray-700"
+            >
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Nombre completo</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  required
+                  className="w-full px-4 py-2 bg-black border border-gray-600 text-white rounded"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Dirección de envío</label>
+                <input
+                  type="text"
+                  name="direccion"
+                  required
+                  className="w-full px-4 py-2 bg-black border border-gray-600 text-white rounded"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Correo electrónico</label>
+                <input
+                  type="email"
+                  name="correo"
+                  required
+                  className="w-full px-4 py-2 bg-black border border-gray-600 text-white rounded"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Observaciones de entrega</label>
+                <textarea
+                  name="observaciones"
+                  className="w-full px-4 py-2 bg-black border border-gray-600 text-white rounded"
+                  placeholder="Ej: Entregar a portería, llamar antes de llegar..."
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full mt-4 px-4 py-2 border border-gray-500 hover:bg-[#222] transition duration-300 uppercase tracking-widest text-sm"
+              >
+                Pagar
+              </button>
+            </motion.form>
+            )}
+          </div>
 
         {/* Imagen con efecto + glass panel */}
         <div className="relative z-10">
