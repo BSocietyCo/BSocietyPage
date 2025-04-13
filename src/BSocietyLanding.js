@@ -203,9 +203,6 @@ export default function BSocietyLanding() {
           ) : (
             <p className="text-red-500 uppercase font-semibold mt-4">Agotado</p>
           )}
-          <div className="mb-6">
-            <ProductInfoAccordion />
-          </div>
           {showForm && (
             <motion.form
               onSubmit={async (e) => {
@@ -303,6 +300,9 @@ export default function BSocietyLanding() {
             </div>
           </motion.div>
         </div>
+        <div className="mb-6">
+            <ProductInfoAccordion />
+          </div>
       </motion.section>
 
       {/* Cierre emocional */}
