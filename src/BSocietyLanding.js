@@ -54,7 +54,7 @@ export default function BSocietyLanding() {
           animate={{ opacity: 1 }}
           transition={{ duration: 2 }}
         >
-          𝕭
+          𝕭 𝕾𝖔𝖈𝖎𝖊𝖙𝖞
         </motion.span>
       </div>
     );
