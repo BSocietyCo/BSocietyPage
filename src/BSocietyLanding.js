@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion, animate } from "framer-motion";
-import BCapImage from './img/BCap.PNG';
+import BCapImage from './img/BJw.png';
 import { getProduct } from './utils/getProduct';
+import { ProductInfoAccordion } from "./Product";
 
 export default function BSocietyLanding() {
   const [loading, setLoading] = useState(true);
@@ -186,6 +187,9 @@ export default function BSocietyLanding() {
           </span>
           <h2 className="text-3xl md:text-4xl mb-4 font-light">{product.name}</h2>
           <p className="text-gray-500 mb-6 text-lg leading-relaxed">{product.description}</p>
+          <div className="mb-6">
+            <ProductInfoAccordion />
+          </div>
           <p className="text-white font-semibold text-xl mb-4">
             {product.price?.toLocaleString("es-CO", {
               style: "currency",

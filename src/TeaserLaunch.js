@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { db } from "./config/firebase";
+import { collection, addDoc } from "firebase/firestore";
+import emailjs from "@emailjs/browser";
 
 export default function Teaser({ onFinish }) {
   const [timeLeft, setTimeLeft] = useState(getTimeLeft());
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   function getTimeLeft() {
     const launchDate = new Date("2025-04-15T00:00:00");
@@ -24,7 +29,7 @@ export default function Teaser({ onFinish }) {
       const updated = getTimeLeft();
       if (!updated) {
         clearInterval(timer);
-        onFinish(); // cambia a la landing
+        onFinish();
       } else {
         setTimeLeft(updated);
       }
@@ -33,8 +38,29 @@ export default function Teaser({ onFinish }) {
     return () => clearInterval(timer);
   }, []);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    try {
+      await addDoc(collection(db, "emails"), { email });
+
+      await emailjs.send(
+        "TU_SERVICE_ID",
+        "TU_TEMPLATE_ID",
+        { to_email: email },
+        "TU_USER_ID"
+      );
+
+      setSubmitted(true);
+    } catch (err) {
+      console.error("❌ Error al guardar/enviar correo:", err);
+      alert("Hubo un problema. Intenta de nuevo.");
+    }
+  };
+
   if (!timeLeft) {
-    return null; // Si ya pasó la fecha
+    return null;
   }
 
   return (
@@ -56,6 +82,27 @@ export default function Teaser({ onFinish }) {
       >
         {`${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`}
       </motion.div>
+
+      {!submitted ? (
+        <form onSubmit={handleSubmit} className="mt-10 flex flex-col gap-4 items-center w-full max-w-md">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            placeholder="Ingresa tu correo para avisarte"
+            className="w-full px-4 py-2 bg-black border border-gray-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+          />
+          <button
+            type="submit"
+            className="px-6 py-3 border border-gray-500 text-sm uppercase tracking-widest hover:bg-[#1a1a1a] transition duration-300"
+          >
+            Notifícame
+          </button>
+        </form>
+      ) : (
+        <p className="mt-8 text-green-400 text-sm">✅ Gracias por registrarte. Revisa tu correo. ✉️</p>
+      )}
 
       <motion.button
         onClick={onFinish}
