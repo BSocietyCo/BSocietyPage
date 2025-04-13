@@ -186,10 +186,7 @@ export default function BSocietyLanding() {
             Producto Exclusivo
           </span>
           <h2 className="text-3xl md:text-4xl mb-4 font-light">{product.name}</h2>
-          <p className="text-gray-500 mb-6 text-lg leading-relaxed">{product.description}</p>
-          <div className="mb-6">
-            <ProductInfoAccordion />
-          </div>
+          <p className="text-gray-500 mb-6 text-lg leading-relaxed">{product.description}</p>          
           <p className="text-white font-semibold text-xl mb-4">
             {product.price?.toLocaleString("es-CO", {
               style: "currency",
@@ -206,7 +203,9 @@ export default function BSocietyLanding() {
           ) : (
             <p className="text-red-500 uppercase font-semibold mt-4">Agotado</p>
           )}
-
+          <div className="mb-6">
+            <ProductInfoAccordion />
+          </div>
           {showForm && (
             <motion.form
               onSubmit={async (e) => {
