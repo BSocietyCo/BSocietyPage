@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { motion, animate } from "framer-motion";
-import BCapImage from './img/BJw.png';
 import { getProduct } from './utils/getProduct';
 import { ProductInfoAccordion } from "./Product";
+import { Modelo3DCadena } from "./3DProduct";
 
 export default function BSocietyLanding() {
   const [loading, setLoading] = useState(true);
@@ -284,25 +284,22 @@ export default function BSocietyLanding() {
         </div>
 
         {/* Imagen */}
-        <div className="relative z-10">
+        <div className="relative z-10 w-full px-4 md:px-20 mt-20">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="relative rounded-xl overflow-hidden shadow-2xl backdrop-blur-md bg-white/5 border border-white/10"
+            className="relative rounded-2xl overflow-hidden shadow-lg backdrop-blur-lg bg-white/5 border border-white/10"
           >
-            <div className="aspect-square w-full max-w-md mx-auto overflow-hidden">
-              <img
-                src={BCapImage}
-                alt={product.nombre}
-                className="object-cover w-full h-full transform transition-transform duration-300 hover:scale-105"
-              />
+            <div className="relative z-10 h-[500px] md:h-[700px] flex items-center justify-center">
+              <Modelo3DCadena />
             </div>
           </motion.div>
         </div>
+
         <div className="mb-6">
             <ProductInfoAccordion />
-          </div>
+        </div>
       </motion.section>
 
       {/* Cierre emocional */}

@@ -36,7 +36,7 @@ export default function Teaser({ onFinish }) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
