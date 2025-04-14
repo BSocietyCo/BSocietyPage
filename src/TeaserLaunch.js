@@ -43,13 +43,18 @@ export default function Teaser({ onFinish }) {
     if (!email) return;
 
     try {
+      // 1. Guardar en Firestore
       await addDoc(collection(db, "emails"), { email });
 
+      // 2. Enviar email de bienvenida al usuario
       await emailjs.send(
-        "TU_SERVICE_ID",
-        "TU_TEMPLATE_ID",
-        { to_email: email },
-        "TU_USER_ID"
+        "service_1qepry6",      // tu service ID
+        "template_uckpc9j",     // tu template ID
+        {
+          to_email: email,
+          user_name: "Usuario B Society", // si usas esta variable en la plantilla
+        },
+        "3qdgabYJqkgBk34kz"     // tu public key
       );
 
       setSubmitted(true);
@@ -59,9 +64,7 @@ export default function Teaser({ onFinish }) {
     }
   };
 
-  if (!timeLeft) {
-    return null;
-  }
+  if (!timeLeft) return null;
 
   return (
     <div className="bg-black h-screen w-screen text-[#f5f5f5] flex flex-col items-center justify-center text-center font-sans px-6">
@@ -101,7 +104,7 @@ export default function Teaser({ onFinish }) {
           </button>
         </form>
       ) : (
-        <p className="mt-8 text-green-400 text-sm">✅ Gracias por registrarte. Revisa tu correo. ✉️</p>
+        <p className="mt-8 text-green-400 text-sm">Gracias por registrarte. Revisa tu correo.</p>
       )}
 
       <motion.button
